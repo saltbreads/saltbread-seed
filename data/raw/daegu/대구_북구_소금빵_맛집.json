@@ -1,0 +1,57 @@
+[
+  {
+    "title": "소소래",
+    "link": "https://smartstore.naver.com/sosorae",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 북구 구암동 482-51",
+    "roadAddress": "대구광역시 북구 학정로 284 (구암동)",
+    "mapx": "1285616001",
+    "mapy": "359297879"
+  },
+  {
+    "title": "스테이블모먼트 복현점",
+    "link": "https://www.instagram.com/stable_moment01/",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 북구 복현동 253-3 스테이블모먼트",
+    "roadAddress": "대구광역시 북구 복현로8길 19-36 스테이블모먼트",
+    "mapx": "1286257967",
+    "mapy": "358973476"
+  },
+  {
+    "title": "레이지모닝",
+    "link": "http://www.instagram.com/lazymorning_chilgok",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 북구 동천동 874-4 레이지모닝 칠곡점",
+    "roadAddress": "대구광역시 북구 동천로 5-15 레이지모닝 칠곡점",
+    "mapx": "1285566055",
+    "mapy": "359322135"
+  },
+  {
+    "title": "빌리웍스",
+    "link": "http://billyworks.kr",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 북구 고성동3가 1-13 빌리웍스",
+    "roadAddress": "대구광역시 북구 고성북로10길 41 빌리웍스",
+    "mapx": "1285884946",
+    "mapy": "358831446"
+  },
+  {
+    "title": "라운드라운드",
+    "link": "https://blog.naver.com/roundroundbread",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 북구 학정동 926-1 1층",
+    "roadAddress": "대구광역시 북구 학정로 550 1층",
+    "mapx": "1285659276",
+    "mapy": "359536764"
+  }
+]

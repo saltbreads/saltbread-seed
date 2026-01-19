@@ -1,0 +1,57 @@
+[
+  {
+    "title": "슬로우벗베럴 대구점",
+    "link": "https://www.instagram.com/slow_but_better_official",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 동구 신평동 313-1",
+    "roadAddress": "대구광역시 동구 신평로 113",
+    "mapx": "1286822174",
+    "mapy": "358794148"
+  },
+  {
+    "title": "마고플레인아양",
+    "link": "https://www.instagram.com/margaux__plain/",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 동구 지저동 872-1 마고플레인아양",
+    "roadAddress": "대구광역시 동구 해동로 107 마고플레인아양",
+    "mapx": "1286419691",
+    "mapy": "358903009"
+  },
+  {
+    "title": "라부아뜨엘",
+    "link": "http://pf.kakao.com/_xoxjmyG",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 범물동 1374-14 1층",
+    "roadAddress": "대구광역시 수성구 지범로 248-6 1층",
+    "mapx": "1286442412",
+    "mapy": "358175084"
+  },
+  {
+    "title": "마고플레인 강정보점",
+    "link": "https://www.instagram.com/margauxplain_river/",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달성군 다사읍 죽곡리 688-2 마고플레인 강정보점",
+    "roadAddress": "대구광역시 달성군 다사읍 강정본길 68-18 마고플레인 강정보점",
+    "mapx": "1284650808",
+    "mapy": "358441915"
+  },
+  {
+    "title": "소소래",
+    "link": "https://smartstore.naver.com/sosorae",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 북구 구암동 482-51",
+    "roadAddress": "대구광역시 북구 학정로 284 (구암동)",
+    "mapx": "1285616001",
+    "mapy": "359297879"
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "title": "시지본",
+    "link": "",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 노변동 120-2",
+    "roadAddress": "대구광역시 수성구 노변로 79",
+    "mapx": "1286999176",
+    "mapy": "358388270"
+  },
+  {
+    "title": "페이스포포",
+    "link": "https://www.instagram.com/pacepopo.daegu/",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 시지동 196-15",
+    "roadAddress": "대구광역시 수성구 고모로 15-1",
+    "mapx": "1286879989",
+    "mapy": "358436280"
+  },
+  {
+    "title": "메종루이 베이커리",
+    "link": "",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 시지동 587-1",
+    "roadAddress": "대구광역시 수성구 알파시티2로 35",
+    "mapx": "1286929247",
+    "mapy": "358395441"
+  },
+  {
+    "title": "아로케 대구시지점",
+    "link": "https://www.instagram.com/aroke_daegu?igsh=bDM2dGpxZnB0ZGo4&utm_source=qr",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 시지동 246-5 1층",
+    "roadAddress": "대구광역시 수성구 달구벌대로 3058 1층",
+    "mapx": "1286916109",
+    "mapy": "358425538"
+  },
+  {
+    "title": "숲베이커리",
+    "link": "https://blog.naver.com/forestbakery",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 고모동 90-1",
+    "roadAddress": "대구광역시 수성구 팔현길 136",
+    "mapx": "1286660228",
+    "mapy": "358698375"
+  }
+]

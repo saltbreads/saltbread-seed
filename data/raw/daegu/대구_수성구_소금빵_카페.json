@@ -1,0 +1,57 @@
+[
+  {
+    "title": "라부아뜨엘",
+    "link": "http://pf.kakao.com/_xoxjmyG",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 범물동 1374-14 1층",
+    "roadAddress": "대구광역시 수성구 지범로 248-6 1층",
+    "mapx": "1286442412",
+    "mapy": "358175084"
+  },
+  {
+    "title": "르배 본점",
+    "link": "https://www.instagram.com/lebaebakery/",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 만촌동 1356-19 1층",
+    "roadAddress": "대구광역시 수성구 화랑로8길 11-11 1층",
+    "mapx": "1286337658",
+    "mapy": "358703866"
+  },
+  {
+    "title": "포켓",
+    "link": "https://www.instagram.com/cafe__pocket_",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 두산동 653-8 카페 포켓",
+    "roadAddress": "대구광역시 수성구 수성못길 20 카페 포켓",
+    "mapx": "1286222228",
+    "mapy": "358265899"
+  },
+  {
+    "title": "삼송1957",
+    "link": "https://www.ssbnc.kr/pg/bbs/board.php?bo_table=store2",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 두산동 695 삼송 1957",
+    "roadAddress": "대구광역시 수성구 수성못2길 26 삼송 1957",
+    "mapx": "1286240091",
+    "mapy": "358251678"
+  },
+  {
+    "title": "라봉봉제과점",
+    "link": "",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 수성구 지산동 1279-11",
+    "roadAddress": "대구광역시 수성구 지범로21길 10",
+    "mapx": "1286366889",
+    "mapy": "358244416"
+  }
+]

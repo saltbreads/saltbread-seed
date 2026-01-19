@@ -1,0 +1,35 @@
+[
+  {
+    "title": "라운드라운드",
+    "link": "https://blog.naver.com/roundroundbread",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 북구 학정동 926-1 1층",
+    "roadAddress": "대구광역시 북구 학정로 550 1층",
+    "mapx": "1285659276",
+    "mapy": "359536764"
+  },
+  {
+    "title": "밀밭베이커리 미인점",
+    "link": "http://baemin.me/NlvBtIgPa",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 동인동4가 274-10 1층",
+    "roadAddress": "대구광역시 중구 동덕로30길 85 1층",
+    "mapx": "1286083890",
+    "mapy": "358665223"
+  },
+  {
+    "title": "도우프커피스탠드",
+    "link": "https://www.instagram.com/dou.p_coffee_stand?igsh=OGQ5ZDc2ODk2ZA%3D%3D&utm_source=qr",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 동인동4가 210-2 지상1층",
+    "roadAddress": "대구광역시 중구 국채보상로140길 17-8 지상1층",
+    "mapx": "1286067857",
+    "mapy": "358679434"
+  }
+]

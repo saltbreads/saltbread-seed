@@ -1,0 +1,57 @@
+[
+  {
+    "title": "삼송빵집 중앙로점",
+    "link": "http://www.ssbnc.kr/",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 동성로3가 1-3",
+    "roadAddress": "대구광역시 중구 중앙대로 397",
+    "mapx": "1285934399",
+    "mapy": "358686159"
+  },
+  {
+    "title": "빵관심",
+    "link": "",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 봉산동 34-3 1층, 2층 전체",
+    "roadAddress": "대구광역시 중구 동성로1길 45 1층, 2층 전체",
+    "mapx": "1285960101",
+    "mapy": "358660668"
+  },
+  {
+    "title": "팜앤힐스",
+    "link": "https://www.instagram.com/farm_and_hills",
+    "category": "음식점>양식",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 공평동 16-22 1층",
+    "roadAddress": "대구광역시 중구 동성로6길 43 1층",
+    "mapx": "1285977663",
+    "mapy": "358687406"
+  },
+  {
+    "title": "오디너리하우스",
+    "link": "https://www.instagram.com/_ordinary_house",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 삼덕동1가 11-2",
+    "roadAddress": "대구광역시 중구 동성로2길 21-8",
+    "mapx": "1285959115",
+    "mapy": "358670750"
+  },
+  {
+    "title": "르폴뒤",
+    "link": "",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 덕산동 124-29",
+    "roadAddress": "대구광역시 중구 동성로1길 26",
+    "mapx": "1285948911",
+    "mapy": "358664376"
+  }
+]

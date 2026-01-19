@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# venv
+.venv/
+venv/
+ENV/
+
+# env files / secrets
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# data (원본/캐시/결과물은 기본적으로 제외)
+#data/raw/
+#data/interim/
+#data/output/*
+
+# output 폴더 자체는 남기고, 데모 결과물만 예외로 추적하고 싶으면 아래처럼:
+#!data/output/
+#!data/output/demo_places.csv

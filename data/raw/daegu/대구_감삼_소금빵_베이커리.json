@@ -1,0 +1,57 @@
+[
+  {
+    "title": "사운즈커피 죽전점",
+    "link": "",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달서구 감삼동 709 301동 1층 3~4호",
+    "roadAddress": "대구광역시 달서구 와룡로31길 26 301동 1층 3~4호",
+    "mapx": "1285341541",
+    "mapy": "358467379"
+  },
+  {
+    "title": "카프리쵸사 죽전 직영점",
+    "link": "https://smartstore.naver.com/ccb_/category/ALL?cp=1",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달서구 감삼동 714 1층 101, 102호",
+    "roadAddress": "대구광역시 달서구 와룡로33길 20 1층 101, 102호",
+    "mapx": "1285351930",
+    "mapy": "358477620"
+  },
+  {
+    "title": "리노크",
+    "link": "https://open.kakao.com/o/sAPMqJHh",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달서구 감삼동 195-23",
+    "roadAddress": "대구광역시 달서구 감삼남길 144",
+    "mapx": "1285447200",
+    "mapy": "358494946"
+  },
+  {
+    "title": "계절상점",
+    "link": "https://www.instagram.com/seasonbakeshop",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달서구 감삼동 207-9",
+    "roadAddress": "대구광역시 달서구 당산로 109-1",
+    "mapx": "1285450429",
+    "mapy": "358472516"
+  },
+  {
+    "title": "음믐빵집",
+    "link": "https://www.instagram.com/_umm_m",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달서구 감삼동 60-9 1층",
+    "roadAddress": "대구광역시 달서구 당산로 205 1층",
+    "mapx": "1285477658",
+    "mapy": "358549695"
+  }
+]

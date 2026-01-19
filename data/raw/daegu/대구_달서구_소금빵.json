@@ -1,0 +1,57 @@
+[
+  {
+    "title": "스테이블모먼트 월배점",
+    "link": "http://instagram.com/stable_moment02",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달서구 대천동 936 스테이블모먼트",
+    "roadAddress": "대구광역시 달서구 조암남로32길 24 스테이블모먼트",
+    "mapx": "1285163669",
+    "mapy": "358190620"
+  },
+  {
+    "title": "빠다롤 더 테라스",
+    "link": "",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달서구 월성동 1180",
+    "roadAddress": "대구광역시 달서구 조암남로14길 42",
+    "mapx": "1285255565",
+    "mapy": "358227284"
+  },
+  {
+    "title": "카페 엠엔티 신월성 본점",
+    "link": "http://instagram.com/cafe.mnt",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달서구 월성동 1187-2 cafe mnt",
+    "roadAddress": "대구광역시 달서구 조암남로14길 52-2 cafe mnt",
+    "mapx": "1285259474",
+    "mapy": "358231624"
+  },
+  {
+    "title": "우즈베이커리 대곡점",
+    "link": "http://www.wooz.kr/",
+    "category": "음식점>카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달서구 대곡동 1056-1 1.2층",
+    "roadAddress": "대구광역시 달서구 갈밭로 76 1.2층",
+    "mapx": "1285285011",
+    "mapy": "358055987"
+  },
+  {
+    "title": "브로 커피앤베이커리",
+    "link": "",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 달서구 도원동 972-9 Bro coffee&bakery",
+    "roadAddress": "대구광역시 달서구 수밭서길 11 Bro coffee&bakery",
+    "mapx": "1285478344",
+    "mapy": "357972111"
+  }
+]

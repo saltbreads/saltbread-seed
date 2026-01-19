@@ -1,0 +1,57 @@
+[
+  {
+    "title": "퀸즈크라운베이커리카페",
+    "link": "",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 서구 평리동 1369-4 1층~4층",
+    "roadAddress": "대구광역시 서구 서대구로 118 1층~4층",
+    "mapx": "1285555724",
+    "mapy": "358685026"
+  },
+  {
+    "title": "수녹",
+    "link": "",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 서구 비산동 415-13 1층",
+    "roadAddress": "대구광역시 서구 달서로26길 15-5 1층",
+    "mapx": "1285729227",
+    "mapy": "358732393"
+  },
+  {
+    "title": "까레몽",
+    "link": "https://www.instagram.com/bakery_carremont",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 서구 평리동 1408 평리청구타운상가",
+    "roadAddress": "대구광역시 서구 서대구로 77 평리청구타운상가",
+    "mapx": "1285557619",
+    "mapy": "358644070"
+  },
+  {
+    "title": "감미정",
+    "link": "https://www.naver.com/gammijung",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 서구 내당동 429-1 1층",
+    "roadAddress": "대구광역시 서구 당산로 237 1층",
+    "mapx": "1285469191",
+    "mapy": "358575755"
+  },
+  {
+    "title": "삼송빵집 서대구점",
+    "link": "https://blog.naver.com/samsongbakery1957",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 서구 평리동 1301 한국업사이클센터 1층",
+    "roadAddress": "대구광역시 서구 국채보상로 243 한국업사이클센터 1층",
+    "mapx": "1285576449",
+    "mapy": "358714529"
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "title": "퀸즈크라운베이커리카페",
+    "link": "",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 서구 평리동 1369-4 1층~4층",
+    "roadAddress": "대구광역시 서구 서대구로 118 1층~4층",
+    "mapx": "1285555724",
+    "mapy": "358685026"
+  },
+  {
+    "title": "수녹",
+    "link": "",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 서구 비산동 415-13 1층",
+    "roadAddress": "대구광역시 서구 달서로26길 15-5 1층",
+    "mapx": "1285729227",
+    "mapy": "358732393"
+  },
+  {
+    "title": "하프베이크",
+    "link": "",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 서구 내당동 886-8 1층",
+    "roadAddress": "대구광역시 서구 달구벌대로375길 23-1 1층",
+    "mapx": "1285706680",
+    "mapy": "358629661"
+  },
+  {
+    "title": "까레몽",
+    "link": "https://www.instagram.com/bakery_carremont",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 서구 평리동 1408 평리청구타운상가",
+    "roadAddress": "대구광역시 서구 서대구로 77 평리청구타운상가",
+    "mapx": "1285557619",
+    "mapy": "358644070"
+  },
+  {
+    "title": "올망",
+    "link": "https://www.instagram.com/olmang_bake?igshid=Y2ZmNzg0YzQ=",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 서구 내당동 209-91 1층",
+    "roadAddress": "대구광역시 서구 달구벌대로361길 12 1층",
+    "mapx": "1285616617",
+    "mapy": "358604496"
+  }
+]

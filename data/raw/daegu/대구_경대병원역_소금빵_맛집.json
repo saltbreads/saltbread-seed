@@ -1,0 +1,57 @@
+[
+  {
+    "title": "인더매스 삼덕",
+    "link": "https://blog.naver.com/masscoffee_",
+    "category": "음식점>카페,디저트",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 삼덕동2가 28-1 1층",
+    "roadAddress": "대구광역시 중구 공평로8길 29 1층",
+    "mapx": "1286016265",
+    "mapy": "358667540"
+  },
+  {
+    "title": "팜앤힐스",
+    "link": "https://www.instagram.com/farm_and_hills",
+    "category": "음식점>양식",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 공평동 16-22 1층",
+    "roadAddress": "대구광역시 중구 동성로6길 43 1층",
+    "mapx": "1285977663",
+    "mapy": "358687406"
+  },
+  {
+    "title": "밀밭베이커리 미인점",
+    "link": "http://baemin.me/NlvBtIgPa",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 동인동4가 274-10 1층",
+    "roadAddress": "대구광역시 중구 동덕로30길 85 1층",
+    "mapx": "1286083890",
+    "mapy": "358665223"
+  },
+  {
+    "title": "마들렌베이커리 대봉점",
+    "link": "https://blog.naver.com/madeleinebakery",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 봉산동 185-30 1층 101호",
+    "roadAddress": "대구광역시 중구 대봉로 255 1층 101호",
+    "mapx": "1286002739",
+    "mapy": "358612737"
+  },
+  {
+    "title": "신화빵집",
+    "link": "http://instagram.com/shinhwa__bread",
+    "category": "카페,디저트>베이커리",
+    "description": "",
+    "telephone": "",
+    "address": "대구광역시 중구 대봉동 23-7 1층 신화빵집",
+    "roadAddress": "대구광역시 중구 동덕로 91 1층 신화빵집",
+    "mapx": "1286026253",
+    "mapy": "358627276"
+  }
+]
