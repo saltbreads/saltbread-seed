@@ -13,6 +13,9 @@ ENV/
 .env
 .env.*
 
+# IDE
+.idea/
+
 # macOS
 .DS_Store
 
