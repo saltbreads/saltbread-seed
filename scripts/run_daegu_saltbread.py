@@ -134,6 +134,12 @@ def safe_search(query: str, search_guard: QuotaGuard, max_retries: int = 4):
             raise
     return []
 
+def safe_filename(s: str) -> str:
+    # 특수문자 들어올때 파일 저장 깨지는거 방지
+    s = re.sub(r"[^\w\s-]", "", s)  # 특수문자 제거
+    s = re.sub(r"\s+", "_", s).strip("_")
+    return s[:120]  # 너무 긴 파일명 방지
+
 def main():
     start_t = time.perf_counter()
     assert_env()
@@ -163,13 +169,15 @@ def main():
 
         # raw 저장(너무 많아질 수 있어서 50개마다 1번만 저장해도 됨)
         if idx <= 60:  # 처음 60개만 저장 (원하면 숫자 늘려도 됨)
-            (RAW_DIR / f"{q.replace(' ', '_')}.json").write_text(
+            (RAW_DIR / f"{safe_filename(q)}.json").write_text(
                 json.dumps(items, ensure_ascii=False, indent=2),
                 encoding="utf-8"
             )
 
         for it in items:
             name = (it.get("title") or "").strip()
+            #<b> 대구 </b> 이런거 정제용
+            name = re.sub(r"<[^>]+>", "", name).strip()
             road = (it.get("roadAddress") or "").strip()
             jibun = (it.get("address") or "").strip()
             tel = (it.get("telephone") or "").strip()
