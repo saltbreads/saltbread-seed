@@ -1,0 +1,21 @@
+{
+  "result": {
+    "type": "all",
+    "metaInfo": {
+      "pageId": "ncaptcha-all-search-no-result",
+      "sessionId": null,
+      "rcode": "",
+      "searchedQuery": "니재빵집 경상남도 창원시 성산구 원이대로 674 니재빵집",
+      "displayCorrectAnswer": false
+    },
+    "address": null,
+    "place": null,
+    "bus": null,
+    "ncaptcha": {
+      "uuid": "ed01b8bd-54c7-4087-aca8-0ce96ef3f151",
+      "ip": "163.152.3.165",
+      "confirmRules": "CE_EMPTY_TOKEN",
+      "timestamp": 1768907249373
+    }
+  }
+}

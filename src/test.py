@@ -21,3 +21,4 @@ r = requests.get(
 print(r.status_code)
 print(r.text[:300])
 
+print('python -m scripts.enrich_daegu_saltbread')
