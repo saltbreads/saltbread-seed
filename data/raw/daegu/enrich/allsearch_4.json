@@ -1,0 +1,21 @@
+{
+  "result": {
+    "type": "all",
+    "metaInfo": {
+      "pageId": "ncaptcha-all-search-no-result",
+      "sessionId": null,
+      "rcode": "",
+      "searchedQuery": "홍쌀빵 부산광역시 금정구 금샘로 488 1,2층",
+      "displayCorrectAnswer": false
+    },
+    "address": null,
+    "place": null,
+    "bus": null,
+    "ncaptcha": {
+      "uuid": "172dd583-ce45-452c-89c4-389a02195bed",
+      "ip": "163.152.3.165",
+      "confirmRules": "CE_EMPTY_TOKEN",
+      "timestamp": 1768907252288
+    }
+  }
+}

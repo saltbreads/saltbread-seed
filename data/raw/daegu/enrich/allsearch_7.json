@@ -1,0 +1,21 @@
+{
+  "result": {
+    "type": "all",
+    "metaInfo": {
+      "pageId": "ncaptcha-all-search-no-result",
+      "sessionId": null,
+      "rcode": "",
+      "searchedQuery": "카페론디 부산광역시 금정구 금강로 730 1층",
+      "displayCorrectAnswer": false
+    },
+    "address": null,
+    "place": null,
+    "bus": null,
+    "ncaptcha": {
+      "uuid": "1d34e348-c5cc-4c8e-8393-6724a7e60df5",
+      "ip": "163.152.3.165",
+      "confirmRules": "CE_EMPTY_TOKEN",
+      "timestamp": 1768907255343
+    }
+  }
+}

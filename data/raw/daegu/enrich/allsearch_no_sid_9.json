@@ -1,0 +1,21 @@
+{
+  "result": {
+    "type": "all",
+    "metaInfo": {
+      "pageId": "ncaptcha-all-search-no-result",
+      "sessionId": null,
+      "rcode": "",
+      "searchedQuery": "대구 카프리쵸사 현풍 본점",
+      "displayCorrectAnswer": false
+    },
+    "address": null,
+    "place": null,
+    "bus": null,
+    "ncaptcha": {
+      "uuid": "1e217262-3600-4829-9d6c-f8707914b9e0",
+      "ip": "163.152.3.164",
+      "confirmRules": "CE_EMPTY_TOKEN",
+      "timestamp": 1768988834553
+    }
+  }
+}

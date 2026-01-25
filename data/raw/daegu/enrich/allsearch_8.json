@@ -1,0 +1,21 @@
+{
+  "result": {
+    "type": "all",
+    "metaInfo": {
+      "pageId": "ncaptcha-all-search-no-result",
+      "sessionId": null,
+      "rcode": "",
+      "searchedQuery": "남산562 부산광역시 금정구 금샘로 562 3층, 4층(남산동)",
+      "displayCorrectAnswer": false
+    },
+    "address": null,
+    "place": null,
+    "bus": null,
+    "ncaptcha": {
+      "uuid": "aadac27e-3984-4de0-ac17-1a9d28df669f",
+      "ip": "163.152.3.165",
+      "confirmRules": "CE_EMPTY_TOKEN",
+      "timestamp": 1768907256180
+    }
+  }
+}

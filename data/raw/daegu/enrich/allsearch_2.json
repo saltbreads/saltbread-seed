@@ -1,0 +1,21 @@
+{
+  "result": {
+    "type": "all",
+    "metaInfo": {
+      "pageId": "ncaptcha-all-search-no-result",
+      "sessionId": null,
+      "rcode": "",
+      "searchedQuery": "그레이핍플 창원상남점 경상남도 창원시 성산구 마디미로4번길 5 1층 그레이핍플 창원 상남",
+      "displayCorrectAnswer": false
+    },
+    "address": null,
+    "place": null,
+    "bus": null,
+    "ncaptcha": {
+      "uuid": "1cebd15c-905b-489a-aa93-af4151f9c8ef",
+      "ip": "163.152.3.165",
+      "confirmRules": "CE_EMPTY_TOKEN",
+      "timestamp": 1768907250424
+    }
+  }
+}
