@@ -1,0 +1,1 @@
+# collect_place_ids.py
