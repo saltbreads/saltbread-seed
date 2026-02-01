@@ -22,3 +22,4 @@ print(r.status_code)
 print(r.text[:300])
 
 print('python -m scripts.enrich_daegu_saltbread')
+print('python -m scripts.collect_daegu_place_ids')
