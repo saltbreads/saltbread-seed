@@ -108,111 +108,86 @@ def extract_place_id_from_url(url: str) -> str:
     m = PLACE_ID_RE.search(url or "")
     return m.group(1) if m else ""
 
-
-def safe_sleep():
-    time.sleep(random.uniform(5.0, 7.1))
-
-
-def collect_one(driver, keyword: str):
+def wait_until_list_or_detail(driver, timeout=18):
     """
-    흐름:
-    - 검색창에 keyword 입력 + Enter
-    - 결과가 뜨면 '첫 결과 클릭'을 시도
-    - URL에서 /place/{id} 추출
+    Enter 이후:
+    - URL에 /place/{id} 생기면 -> ("DETAIL", pid)
+    - iframe들 중 어딘가에 /place/ 링크가 생기면 -> ("LIST", "")
+    - timeout -> ("TIMEOUT", "")
     """
-    open_map(driver)
+    end = time.time() + timeout
+    while time.time() < end:
+        # 1) 자동 상세 진입(결과 1개) 먼저 체크
+        pid = extract_place_id_from_url(driver.current_url)
+        if pid:
+            return "DETAIL", pid
 
-    inp = get_search_input(driver)
-    if inp is None:
-        return "", "NO_SEARCH_INPUT"
+        # 2) 리스트(결과 여러 개) 체크: iframe 어디든 /place/ 링크가 생기면 LIST
+        driver.switch_to.default_content()
+        frames = driver.find_elements(By.TAG_NAME, "iframe")
+        for fr in frames:
+            try:
+                driver.switch_to.frame(fr)
+                if driver.find_elements(By.CSS_SELECTOR, "a[href*='/place/']"):
+                    driver.switch_to.default_content()
+                    return "LIST", ""
+            except Exception:
+                pass
+            finally:
+                driver.switch_to.default_content()
 
-    # 입력
-    inp.click()
-    inp.send_keys(Keys.COMMAND, "a")  # mac
-    inp.send_keys(keyword)
-    inp.send_keys(Keys.ENTER)
+        time.sleep(0.25)
 
-    safe_sleep()
+    driver.switch_to.default_content()
+    return "TIMEOUT", ""
 
-    # ✅ (중요) 검색 결과 1개면 네이버가 자동으로 상세로 들어감 → URL에 /place/{id}가 생김
-    pid = extract_place_id_from_url(driver.current_url)
-    if pid:
-        return pid, "SID_OK_AUTO_DETAIL"
 
-    # 결과 클릭: iframe 구조가 바뀌기 때문에 "가능한 클릭 후보"를 폭넓게 탐색
+def click_first_place_link_anywhere(driver):
     driver.switch_to.default_content()
     frames = driver.find_elements(By.TAG_NAME, "iframe")
 
-    clicked = False
     last_err = ""
-
-    # 후보 selector들 (네이버 지도 UI가 바뀌면 여기만 수정하면 됨)
-    result_selectors = [
-        (By.CSS_SELECTOR, "a[href*='/place/']"),
-        (By.CSS_SELECTOR, "li a[href*='/place/']"),
-        (By.CSS_SELECTOR, "div a[href*='/place/']"),
-    ]
-
     for fr in frames:
         try:
             driver.switch_to.default_content()
             driver.switch_to.frame(fr)
 
-            # 첫 place 링크 클릭
-            for by, sel in result_selectors:
-                links = driver.find_elements(by, sel)
-                if links:
-                    try:
-                        links[0].click()
-                        clicked = True
-                        break
-                    except Exception as e:
-                        last_err = f"CLICK_ERR:{type(e).__name__}"
-                        continue
-            if clicked:
-                break
+            links = driver.find_elements(By.CSS_SELECTOR, "a[href*='/place/']")
+            if not links:
+                continue
+
+            target = links[0]
+
+            # ✅ 화면 중앙으로 스크롤 (클릭 인터셉트 감소)
+            try:
+                driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", target)
+                time.sleep(0.2)
+            except Exception:
+                pass
+
+            # ✅ JS click 우선 (네이버 맵은 이게 제일 잘 먹음)
+            try:
+                driver.execute_script("arguments[0].click();", target)
+                driver.switch_to.default_content()
+                return True, ""
+            except Exception as e:
+                last_err = f"CLICK_ERR:{type(e).__name__}"
+                continue
+
         except Exception as e:
             last_err = f"FRAME_ERR:{type(e).__name__}"
-            continue
-
-    driver.switch_to.default_content()
-
-    if not clicked:
-        return "", last_err or "NO_RESULT_CLICK"
-
-    safe_sleep()
-
-    # ✅ 클릭 후: URL에 /place/{id}가 생길 때까지 기다린다
-    try:
-        WebDriverWait(driver, 12).until(lambda d: extract_place_id_from_url(d.current_url))
-    except TimeoutException:
-        # URL이 끝까지 안 바뀌면 실패 처리 (혹은 아래 보조 로직으로 넘어가도 됨)
-        pass
-
-    pid = extract_place_id_from_url(driver.current_url)
-    if pid:
-        return pid, "SID_OK_AFTER_CLICK"
-
-    # URL이 place를 안 갖고 있으면, 링크/iframe에서 다시 한 번 시도(보조)
-    try:
-        # 모든 프레임에서 place 링크의 href를 훑기
-        driver.switch_to.default_content()
-        frames = driver.find_elements(By.TAG_NAME, "iframe")
-        for fr in frames:
+        finally:
             driver.switch_to.default_content()
-            driver.switch_to.frame(fr)
-            links = driver.find_elements(By.CSS_SELECTOR, "a[href*='/place/']")
-            if links:
-                href = links[0].get_attribute("href") or ""
-                pid = extract_place_id_from_url(href)
-                if pid:
-                    return pid, "SID_OK_HREF"
-    except Exception:
-        pass
-    finally:
-        driver.switch_to.default_content()
 
-    return "", "SID_NOT_IN_URL"
+    return False, (last_err or "NO_RESULT_LINKS")
+
+
+
+
+def safe_sleep():
+    time.sleep(random.uniform(5.0, 7.1))
+
+
 
 def any_place_link_exists_in_any_iframe(driver) -> bool:
     """어떤 iframe 안에서든 /place/ 링크가 하나라도 생겼는지"""
@@ -278,6 +253,63 @@ def click_first_place_link(driver):
     driver.switch_to.default_content()
     return False, last_err or "NO_RESULT_LINKS"
 
+
+def collect_one(driver, keyword: str):
+    open_map(driver)
+
+    inp = get_search_input(driver)
+    if inp is None:
+        return "", "NO_SEARCH_INPUT"
+
+    # 입력
+    inp.click()
+    inp.send_keys(Keys.COMMAND, "a")  # mac
+    inp.send_keys(keyword)
+    inp.send_keys(Keys.ENTER)
+
+    # ✅ 여기서 sleep 말고: (자동상세) vs (리스트) vs (타임아웃) 판별
+    state, pid = wait_until_list_or_detail(driver, timeout=18)
+
+    if state == "DETAIL":
+        return pid, "SID_OK_AUTO_DETAIL"
+
+    if state == "TIMEOUT":
+        return "", "SEARCH_TIMEOUT_NO_UI"
+
+    # ✅ LIST면 첫 결과 클릭
+    ok, err = click_first_place_link_anywhere(driver)
+    if not ok:
+        return "", err
+
+    # ✅ 클릭 후: URL에 /place/{id} 뜰 때까지 기다림
+    try:
+        WebDriverWait(driver, 12).until(lambda d: extract_place_id_from_url(d.current_url))
+    except TimeoutException:
+        pass
+
+    pid = extract_place_id_from_url(driver.current_url)
+    if pid:
+        return pid, "SID_OK_AFTER_CLICK"
+
+    # 보조: href에서라도 pid 찾기(기존 로직 유지)
+    try:
+        driver.switch_to.default_content()
+        frames = driver.find_elements(By.TAG_NAME, "iframe")
+        for fr in frames:
+            driver.switch_to.default_content()
+            driver.switch_to.frame(fr)
+            links = driver.find_elements(By.CSS_SELECTOR, "a[href*='/place/']")
+            if links:
+                href = links[0].get_attribute("href") or ""
+                pid = extract_place_id_from_url(href)
+                if pid:
+                    return pid, "SID_OK_HREF"
+    except Exception:
+        pass
+    finally:
+        driver.switch_to.default_content()
+
+    return "", "SID_NOT_IN_URL"
 
 
 
@@ -413,3 +445,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
