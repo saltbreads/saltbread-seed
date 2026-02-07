@@ -12,8 +12,11 @@ from src.clients.selenium_naver_map import (
     open_place_by_sid,
     extract_phone,
     extract_ai_briefing,
+    extract_visitor_review_keywords,
     jitter_sleep,
 )
+
+from src.utils.scroll import scroll_n_times
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 
@@ -51,6 +54,10 @@ def merge_checkpoint(df: pd.DataFrame) -> pd.DataFrame:
         "ai_briefing_json",
         "ai_briefing_status",
         "ai_briefing_debug",
+        "visitor_review_total",
+        "review_kw_json",
+        "review_kw_status",
+        "review_kw_debug",
     ]
     keep_cols = [c for c in keep_cols if c in ck.columns]
 
@@ -69,6 +76,10 @@ def merge_checkpoint(df: pd.DataFrame) -> pd.DataFrame:
         "ai_briefing_json",
         "ai_briefing_status",
         "ai_briefing_debug",
+        "visitor_review_total",
+        "review_kw_json",
+        "review_kw_status",
+        "review_kw_debug",
     ]:
         if f"{col}_ck" in df.columns:
             df[col] = df[col].where(df[col].astype(str).str.strip().str.len() > 0, df[f"{col}_ck"].fillna(""))
@@ -99,23 +110,18 @@ def main():
         "ai_briefing_json",
         "ai_briefing_status",
         "ai_briefing_debug",
+        "visitor_review_total",
+        "review_kw_json",
+        "review_kw_status",
+        "review_kw_debug",
         "basic_try",
         "ai_try",
+
     ]:
         if col not in df.columns:
             df[col] = 0 if col in ("basic_try", "ai_try") else ""
 
     df = merge_checkpoint(df)
-
-    # def is_empty(x):
-    #     return str(x or "").strip() == ""
-    #
-    # # pending: sid 있고 아직 basic_status 없는 것
-    # pending = df[
-    #     df["naver_place_id"].notna()
-    #     & (df["naver_place_id"].astype(str).str.strip().str.len() > 0)
-    #     & df["basic_status"].apply(is_empty)
-    # ].copy()
 
     MAX_AI_TRIES = 2
 
@@ -140,20 +146,40 @@ def main():
     def need_phone(row) -> bool:
         return is_blank(row.get("phone_status"))
 
+    def need_keywords(row) -> bool:
+        st = str(row.get("review_kw_status") or "").strip()
+        # 아예 안 돌렸으면 다시
+        if is_blank(st):
+            return True
+        # 섹션 자체 못찾은건(로딩/스크롤) 재시도 가치 있음
+        if st == "VISITOR_REVIEW_SECTION_NOT_FOUND":
+            return True
+        # - 원래 없다고 치고 끝내려면 False
+        # - 그래도 한 번 더 시도해보려면 True
+        return False
+
+    #테스트용 코드 부분 나중에 이부분만 False로 하면 다 실행
+    DEV_FORCE_RERUN = True  # ✅ 개발 중엔 True: pending 조건 무시하고 무조건 돌림
+    TEST_LIMIT = 10  # ✅ 개발 중엔 10, 대량 실행 땐 None
+
     pending = df[
         df["naver_place_id"].notna()
         & (df["naver_place_id"].astype(str).str.strip().str.len() > 0)
         ].copy()
 
-    pending = pending[
-        pending["basic_status"].apply(is_blank)
-        | pending.apply(need_phone, axis=1)
-        | pending.apply(need_ai_retry, axis=1)
-        ].copy()
+    if not DEV_FORCE_RERUN:
+        pending = pending[
+            pending["basic_status"].apply(is_blank)
+            | pending.apply(need_phone, axis=1)
+            | pending.apply(need_ai_retry, axis=1)
+            | pending.apply(need_keywords, axis=1)
+            ].copy()
 
 
     # ✅ 테스트 10개
-    pending = pending.head(5).copy()
+    if TEST_LIMIT:
+        pending = pending.head(TEST_LIMIT).copy()
+    print(f"DEV_FORCE_RERUN={DEV_FORCE_RERUN} TEST_LIMIT={TEST_LIMIT}")
     print(f"TEST MODE: pending limited to {len(pending)} rows")
     print(f"target rows: {len(df)} | pending basic enrich: {len(pending)}")
 
@@ -182,6 +208,7 @@ def main():
                 if not ok:
                     df.loc[idx, "basic_status"] = "OPEN_FAIL"
                 else:
+                    scroll_n_times(driver, n=6, pause_range=(0.75, 1.35))
                     # 1) 전화번호
                     phone = extract_phone(driver)
                     df.loc[idx, "phone"] = phone
@@ -189,10 +216,18 @@ def main():
 
                     # 2) AI 브리핑 (스크롤 포함)
                     items, ai_status, ai_dbg = extract_ai_briefing(driver, timeout=8, debug=True)
-
                     df.loc[idx, "ai_briefing_json"] = json.dumps(items, ensure_ascii=False)
                     df.loc[idx, "ai_briefing_status"] = ai_status
                     df.loc[idx, "ai_briefing_debug"] = ai_dbg
+
+                    # 3) 방문자 리뷰 키워드 (상위 5개만)
+                    total, kw_items, kw_status, kw_dbg = extract_visitor_review_keywords(driver, timeout=6, debug=True)
+                    kw_items = kw_items[:5]
+
+                    df.loc[idx, "visitor_review_total"] = "" if total is None else int(total)
+                    df.loc[idx, "review_kw_json"] = json.dumps(kw_items, ensure_ascii=False)
+                    df.loc[idx, "review_kw_status"] = kw_status
+                    df.loc[idx, "review_kw_debug"] = kw_dbg
 
                     # ✅ 기본 페이지 OK 여부(개별 필드 실패와 분리)
                     df.loc[idx, "basic_status"] = "OK"

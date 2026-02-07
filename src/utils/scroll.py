@@ -8,6 +8,12 @@ AI_SECTION_XPATH = (
     "//div[contains(@class,'place_section')][.//strong[normalize-space()='AI 브리핑']]"
 )
 
+def scroll_n_times(driver, n=6, pause_range=(0.85, 1.45)):
+    import time, random
+    for _ in range(n):
+        driver.execute_script("window.scrollBy(0, Math.floor(window.innerHeight * 0.85));")
+        time.sleep(random.uniform(*pause_range))
+
 def _get_scrollable_element_js():
     # app-root 내부에서 "scrollHeight > clientHeight"인 스크롤 컨테이너를 찾아 반환
     return """
@@ -34,7 +40,7 @@ def _get_scrollable_element_js():
     return scrollables[0];
     """
 
-def scroll_until_ai_briefing(driver, max_rounds=22, pause_range=(1.5, 2.5), force_down_rounds=3):
+def scroll_until_ai_briefing(driver, max_rounds=14, pause_range=(1.5, 2.5), force_down_rounds=3):
     """
     - entryIframe 안에서 호출된다는 가정
     - 먼저 무조건 force_down_rounds 만큼은 내려서 렌더 트리거
