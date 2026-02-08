@@ -221,6 +221,75 @@ def extract_visitor_review_keywords(driver, timeout=6, debug=False):
         return None, [], f"VISITOR_REVIEW_PARSE_ERR:{type(e).__name__}", str(e) if debug else ""
 
 
+def extract_hero_image(driver, timeout=6, debug=False):
+    """
+    return: (url:str, status:str, debug_info:str)
+    status:
+      - OK
+      - HERO_IMG_STREETVIEW_ONLY
+      - HERO_IMG_NOT_FOUND
+      - HERO_IMG_PARSE_ERR:*
+    """
+    dbg = []
+    try:
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#app-root"))
+        )
+
+        # 1) 1순위: 네가 준 대표사진 앵커 (#_autoPlayable)
+        # <a id="_autoPlayable"> <img src="...">
+        els = driver.find_elements(By.CSS_SELECTOR, "a#_autoPlayable img")
+        if els:
+            img = els[0]
+            src = (img.get_attribute("src") or "").strip()
+            if debug:
+                dbg.append("hit=a#_autoPlayable img")
+                dbg.append(f"src_len={len(src)}")
+            if src:
+                return src, "OK", "\n".join(dbg) if debug else ""
+
+        # 2) 2순위: 상단 썸네일(일반적으로 place_thumb 안의 첫 img)
+        # - 너무 넓게 잡으면 리뷰 이미지까지 섞일 수 있으니 "place_thumb"로 제한
+        cand_imgs = driver.find_elements(By.CSS_SELECTOR, "a.place_thumb img")
+        if cand_imgs:
+            img = cand_imgs[0]
+            src = (img.get_attribute("src") or "").strip()
+
+            # 거리뷰 여부 판정: a 태그 내부에 '거리뷰' 뱃지(span.SHrAF) 있으면 거리뷰로 처리
+            parent_a = img.find_element(By.XPATH, "./ancestor::a[1]")
+            is_street = False
+            try:
+                if parent_a.find_elements(By.CSS_SELECTOR, "span.SHrAF"):
+                    is_street = True
+            except Exception:
+                pass
+
+            if debug:
+                dbg.append("hit=a.place_thumb img (fallback)")
+                dbg.append(f"is_street={is_street}")
+                dbg.append(f"src_len={len(src)}")
+
+            if src:
+                if is_street:
+                    return src, "HERO_IMG_STREETVIEW_ONLY", "\n".join(dbg) if debug else ""
+                return src, "OK", "\n".join(dbg) if debug else ""
+
+        # 3) 3순위: 거리뷰 전용 앵커(F7qGx) (대표사진 미등록 케이스가 여기로 뜨는 경우)
+        street_imgs = driver.find_elements(By.CSS_SELECTOR, "a.F7qGx img")
+        if street_imgs:
+            src = (street_imgs[0].get_attribute("src") or "").strip()
+            if debug:
+                dbg.append("hit=a.F7qGx img (streetview)")
+                dbg.append(f"src_len={len(src)}")
+            if src:
+                return src, "HERO_IMG_STREETVIEW_ONLY", "\n".join(dbg) if debug else ""
+
+        return "", "HERO_IMG_NOT_FOUND", "\n".join(dbg) if debug else ""
+
+    except Exception as e:
+        return "", f"HERO_IMG_PARSE_ERR:{type(e).__name__}", (str(e) if debug else "")
+
+
 
 def jitter_sleep(min_s: float = 2.0, max_s: float = 3.0):
     time.sleep(random.uniform(min_s, max_s))

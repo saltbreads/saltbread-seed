@@ -13,6 +13,7 @@ from src.clients.selenium_naver_map import (
     extract_phone,
     extract_ai_briefing,
     extract_visitor_review_keywords,
+    extract_hero_image,
     jitter_sleep,
 )
 
@@ -58,6 +59,9 @@ def merge_checkpoint(df: pd.DataFrame) -> pd.DataFrame:
         "review_kw_json",
         "review_kw_status",
         "review_kw_debug",
+        "hero_img_url",
+        "hero_img_status",
+        "hero_img_debug",
     ]
     keep_cols = [c for c in keep_cols if c in ck.columns]
 
@@ -80,6 +84,9 @@ def merge_checkpoint(df: pd.DataFrame) -> pd.DataFrame:
         "review_kw_json",
         "review_kw_status",
         "review_kw_debug",
+        "hero_img_url",
+        "hero_img_status",
+        "hero_img_debug",
     ]:
         if f"{col}_ck" in df.columns:
             df[col] = df[col].where(df[col].astype(str).str.strip().str.len() > 0, df[f"{col}_ck"].fillna(""))
@@ -114,6 +121,9 @@ def main():
         "review_kw_json",
         "review_kw_status",
         "review_kw_debug",
+        "hero_img_url",
+        "hero_img_status",
+        "hero_img_debug",
         "basic_try",
         "ai_try",
 
@@ -209,6 +219,13 @@ def main():
                     df.loc[idx, "basic_status"] = "OPEN_FAIL"
                 else:
                     scroll_n_times(driver, n=6, pause_range=(0.75, 1.35))
+
+                    # 0) 대표사진(대문)
+                    hero_url, hero_status, hero_dbg = extract_hero_image(driver, timeout=6, debug=True)
+                    df.loc[idx, "hero_img_url"] = hero_url
+                    df.loc[idx, "hero_img_status"] = hero_status
+                    df.loc[idx, "hero_img_debug"] = hero_dbg
+
                     # 1) 전화번호
                     phone = extract_phone(driver)
                     df.loc[idx, "phone"] = phone
@@ -253,9 +270,11 @@ def main():
 
             print(
                 f"[{done}/{len(pending)}] {name} sid={sid} "
-                f"basic={df.loc[idx,'basic_status']} "
-                f"phone={df.loc[idx,'phone_status']} "
-                f"ai={df.loc[idx,'ai_briefing_status']}"
+                f"basic={df.loc[idx, 'basic_status']} "
+                f"hero={df.loc[idx, 'hero_img_status']} "
+                f"phone={df.loc[idx, 'phone_status']} "
+                f"ai={df.loc[idx, 'ai_briefing_status']} "
+                f"kw={df.loc[idx, 'review_kw_status']}"
             )
 
             jitter_sleep(2.0, 3.0)
