@@ -443,6 +443,196 @@ def extract_business_hours_raw(driver, timeout=6, debug=False) -> Tuple[str, str
         return "", f"HOURS_ERR:{type(e).__name__}", (str(e) if debug else "")
 
 
+def extract_menu_all(driver, timeout=6, debug=False) -> Tuple[List[Dict], List[str], str, str]:
+    """
+    메뉴탭 -> 더보기 반복 -> 메뉴 파싱 -> 우선순위 이미지 5개
+    """
+    dbg = []
+    try:
+        ok, st, d = open_menu_tab(driver, timeout=timeout, debug=debug)
+        if debug and d:
+            dbg.append(d)
+
+        if not ok:
+            # 메뉴 탭이 원래 없는 경우가 핵심 분기
+            return [], [], st, "\n".join(dbg) if debug else ""
+
+        # 더보기 반복 클릭(없으면 0회)
+        clicks, d2 = expand_menu_all(driver, timeout=timeout, debug=debug)
+        if debug and d2:
+            dbg.append(d2)
+
+        # 메뉴 파싱
+        items, d3 = parse_menu_items(driver, timeout=timeout, debug=debug)
+        if debug and d3:
+            dbg.append(d3)
+
+        if not items:
+            return [], [], "MENU_EMPTY", "\n".join(dbg) if debug else ""
+
+        top5 = pick_menu_images(items, limit=5)
+        if debug:
+            dbg.append(f"picked_img_count={len(top5)}")
+
+        return items, top5, "OK", "\n".join(dbg) if debug else ""
+
+    except Exception as e:
+        return [], [], f"MENU_ERR:{type(e).__name__}", (str(e) if debug else "")
+
+
+
+def pick_menu_images(items: List[Dict], limit: int = 5) -> List[str]:
+    import re
+
+    def norm(s: str) -> str:
+        return re.sub(r"\s+", "", (s or "").lower())
+
+    def has_any(name: str, needles: List[str]) -> bool:
+        n = norm(name)
+        return any(x in n for x in needles)
+
+    # ✅ 이미지 있는 메뉴만 대상으로 필터
+    img_items = [it for it in items if (it.get("img_url") or "").strip()]
+
+    picked, used_idx, used_url = [], set(), set()
+
+    def take(filter_fn):
+        for it in img_items:
+            if len(picked) >= limit:
+                return
+            idx = it.get("idx")
+            url = (it.get("img_url") or "").strip()
+            name = it.get("name") or ""
+            if idx in used_idx or not url or url in used_url:
+                continue
+            if filter_fn(name):
+                picked.append(url)
+                used_idx.add(idx)
+                used_url.add(url)
+
+    # 1) 정확히 '소금빵'
+    take(lambda name: norm(name) == "소금빵")
+
+    # 2) '소금빵' or '시오' 포함
+    take(lambda name: has_any(name, ["소금빵", "시오"]))
+
+    # 3) '버터롤' or '소금' or '솔트' or 'salt' or 'butter roll'
+    take(lambda name: (
+        has_any(name, ["버터롤", "소금", "솔트", "salt", "butterroll"])
+        or ("butter roll" in (name or "").lower())
+    ))
+
+    # 4) '빵' 포함
+    take(lambda name: "빵" in (name or ""))
+
+    # 5) 등록순(이미지 있는 것 중)
+    take(lambda name: True)
+
+    return picked
+
+
+def open_menu_tab(driver, timeout=6, debug=False):
+    """
+    place_fixed_maintab 안에서 텍스트 '메뉴' 탭을 찾아 클릭.
+    메뉴 탭이 없으면 MENU_TAB_ABSENT 반환.
+    """
+    dbg = []
+    try:
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#app-root"))
+        )
+
+        # maintab 존재 확인
+        maintabs = driver.find_elements(By.CSS_SELECTOR, "div.place_fixed_maintab")
+        if not maintabs:
+            return False, "MAINTAB_NOT_FOUND", ""
+
+        mt = maintabs[0]
+
+        # 탭들 중 "메뉴" 찾기 (index 변동 대응)
+        menu_tabs = mt.find_elements(By.XPATH, ".//a[contains(@class,'_tab-menu')][.//span[normalize-space(.)='메뉴']]")
+        if not menu_tabs:
+            return False, "MENU_TAB_ABSENT", ""
+
+        tab = menu_tabs[0]
+        driver.execute_script("arguments[0].scrollIntoView({block:'center'});", tab)
+        driver.execute_script("arguments[0].click();", tab)
+        jitter_sleep(0.9, 1.2)
+
+        return True, "OK", "\n".join(dbg) if debug else ""
+
+    except Exception as e:
+        return False, f"MENU_TAB_ERR:{type(e).__name__}", (str(e) if debug else "")
+
+def expand_menu_all(driver, timeout=6, debug=False) -> Tuple[int, str]:
+    """
+    '펼쳐서 더보기' 버튼이 보이는 동안 반복 클릭.
+    return: (click_count, debug_info)
+    """
+    dbg = []
+    clicks = 0
+
+    # 버튼 찾기: 텍스트 기반(가장 튼튼)
+    # - role=button 이거나 a/button 태그
+    btn_xpath = "//*[(@role='button' or self::a or self::button) and contains(normalize-space(.),'펼쳐서 더보기')]"
+
+    for _ in range(40):  # 안전장치
+        btns = driver.find_elements(By.XPATH, btn_xpath)
+        if not btns:
+            break
+        b = btns[0]
+        try:
+            driver.execute_script("arguments[0].scrollIntoView({block:'center'});", b)
+            driver.execute_script("arguments[0].click();", b)
+            clicks += 1
+            jitter_sleep(0.4, 0.9)
+        except Exception:
+            break
+
+    if debug:
+        dbg.append(f"more_clicks={clicks}")
+
+    return clicks, "\n".join(dbg) if debug else ""
+
+def parse_menu_items(driver, timeout=6, debug=False) -> Tuple[List[Dict], str]:
+    dbg = []
+    # li가 뜰 때까지 기다려보기
+    try:
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "li.E2jtL"))
+        )
+    except Exception:
+        # 메뉴가 있어도 li가 없을 수 있으니 그냥 다음으로
+        pass
+
+    lis = driver.find_elements(By.CSS_SELECTOR, "li.E2jtL")
+    if debug:
+        dbg.append(f"li_count={len(lis)}")
+
+    items = []
+    for i, li in enumerate(lis):
+        name = ""
+        price = ""
+        img_url = ""
+
+        n = li.find_elements(By.CSS_SELECTOR, ".lPzHi")
+        if n:
+            name = (n[0].text or "").strip()
+
+        p = li.find_elements(By.CSS_SELECTOR, ".GXS1X")
+        if p:
+            price = (p[0].text or "").strip()  # "3,500원" / "변동" / "준비중" 등 그대로
+
+        img = li.find_elements(By.CSS_SELECTOR, "img")
+        if img:
+            img_url = (img[0].get_attribute("src") or "").strip()
+
+        if name or price or img_url:
+            items.append({"idx": i, "name": name, "price": price, "img_url": img_url})
+
+    return items, "\n".join(dbg) if debug else ""
+
+
 
 def jitter_sleep(min_s: float = 2.0, max_s: float = 3.0):
     time.sleep(random.uniform(min_s, max_s))

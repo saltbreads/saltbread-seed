@@ -25,4 +25,5 @@ print('python -m scripts.enrich_daegu_saltbread')
 print('python -m scripts.collect_daegu_place_ids')
 print('tree -L 5 -I "selenium_fail|*.json|__pycache__|.venv|.git|*.pyc"')
 print('python -m scripts.enrich_daegu_place_basic')
+print('python -m scripts.enrich_daegu_place_menu')
 
