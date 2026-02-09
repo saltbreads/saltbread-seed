@@ -116,7 +116,8 @@ def extract_ai_briefing(driver, timeout=8, debug=False):
         # 섹션으로 뷰포트 이동(추가 안정화)
         try:
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", section)
-            time.sleep(0.2)
+            # time.sleep(0.2)
+            jitter_sleep(0.3,0.6)
         except Exception:
             pass
 
@@ -288,6 +289,158 @@ def extract_hero_image(driver, timeout=6, debug=False):
 
     except Exception as e:
         return "", f"HERO_IMG_PARSE_ERR:{type(e).__name__}", (str(e) if debug else "")
+
+def extract_business_hours_raw(driver, timeout=6, debug=False) -> Tuple[str, str, str]:
+    """
+    펼쳐보기(aria-expanded=true) 이후의 div.w9QyJ 블록 텍스트만 raw로 저장.
+
+    return: (hours_raw:str, status:str, debug_info:str)
+
+    status:
+      - OK                : w9QyJ(요일/매일) 블록을 1개 이상 수집
+      - HOURS_NOT_FOUND   : 영업시간 토글 자체를 못 찾음(없거나 렌더 안됨)
+      - HOURS_NO_DETAIL   : 토글은 있는데 펼친 뒤에도 요약만 있고 상세(w9QyJ 추가) 없음
+      - HOURS_EMPTY_TEXT  : w9QyJ는 찾았는데 텍스트가 비었음(이상)
+      - HOURS_ERR:*       : 예외
+    """
+    dbg = []
+    try:
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#app-root"))
+        )
+
+        # 1) 영업시간 토글(a.gKP9i.RMgN0) 찾기: "영업시간" 앵커 기준으로 가까운 vV_z_ 아래 토글을 잡는다
+        anchors = driver.find_elements(
+            By.XPATH,
+            "//*[contains(@class,'place_blind') and normalize-space(.)='영업시간']"
+        )
+        if not anchors:
+            return "", "HOURS_NOT_FOUND", ""
+
+        toggle = None
+        wrapper = None
+
+        # anchor -> ancestor div 중 vV_z_를 찾고 그 안의 a.gKP9i.RMgN0를 찾는다
+        for a in anchors:
+            vwrap = a.find_elements(By.XPATH, "ancestor::div[contains(@class,'vV_z_')][1]")
+            if vwrap:
+                wrapper = vwrap[0]
+                cand = wrapper.find_elements(By.CSS_SELECTOR, "a.gKP9i.RMgN0")
+                if cand:
+                    toggle = cand[0]
+                    break
+
+        if toggle is None:
+            # fallback: 화면 내 첫 영업시간 토글을 그냥 잡기
+            cand = driver.find_elements(By.CSS_SELECTOR, "div.vV_z_ a.gKP9i.RMgN0")
+            if cand:
+                toggle = cand[0]
+                wrapper = toggle.find_element(By.XPATH, "ancestor::div[contains(@class,'vV_z_')][1]")
+            else:
+                return "", "HOURS_NOT_FOUND", ""
+
+        if debug:
+            dbg.append("hit=hours_toggle")
+
+        # 2) 펼치기: aria-expanded=false면 클릭해서 true로
+        aria = (toggle.get_attribute("aria-expanded") or "").strip().lower()
+        if debug:
+            dbg.append(f"aria_before={aria}")
+
+        if aria != "true":
+            # driver.execute_script("arguments[0].scrollIntoView({block:'center'});", toggle)
+            # jitter_sleep(0.2, 0.4)
+            driver.execute_script("arguments[0].click();", toggle)
+
+            # 펼쳐짐 판정: aria-expanded true OR w9QyJ 개수가 증가(요약+상세)
+            def _expanded(_):
+                a2 = (toggle.get_attribute("aria-expanded") or "").strip().lower()
+                if a2 == "true":
+                    return True
+                return False
+
+            try:
+                WebDriverWait(driver, 2).until(_expanded)
+                jitter_sleep(0.5,1)
+            except Exception:
+                pass  # aria가 안 바뀌는 케이스도 있어서 아래 w9QyJ로 재판정
+
+        aria2 = (toggle.get_attribute("aria-expanded") or "").strip().lower()
+        if debug:
+            dbg.append(f"aria_after={aria2}")
+
+        # 3) 펼친 이후 wrapper 내부의 w9QyJ 수집
+        # wrapper는 <div class="vV_z_"> ... </div>
+        w_blocks = wrapper.find_elements(By.CSS_SELECTOR, "div.w9QyJ")
+
+        # w9QyJ는 항상 최소 1개(요약)가 있고, 펼치면 추가로 더 생기는 구조가 흔함.
+        # 하지만 "매일" 1줄만 있는 곳도 펼친 뒤 w9QyJ가 2개(요약+매일)인 경우가 많음.
+        if debug:
+            dbg.append(f"w9QyJ_count={len(w_blocks)}")
+
+        if not w_blocks:
+            return "", "HOURS_NO_DETAIL", "\n".join(dbg) if debug else ""
+
+        def _clean_hours_text(t: str) -> str:
+            t = (t or "").strip()
+
+            # UI 텍스트 제거
+            t = t.replace("접기", "").replace("펼쳐보기", "").strip()
+
+            # 빈 줄 제거 + 각 줄 trim
+            t = "\n".join([line.strip() for line in t.splitlines() if line.strip()])
+            t = t.replace("\n", " ")
+
+            return t.strip()
+
+        # 4) w9QyJ 텍스트를 줄로 만들기
+        # - 첫 w9QyJ(vI8SM)은 '영업 중/종료 + ~에 종료/시작' 요약
+        # - 그 뒤 w9QyJ들은 요일/매일 상세
+        lines = []
+        for b in w_blocks:
+            t = _clean_hours_text(b.text)
+            if t:
+                lines.append(t)
+
+        if not lines:
+            return "", "HOURS_EMPTY_TEXT", "\n".join(dbg) if debug else ""
+
+        # 5) "상세만" 원하면 요약(vI8SM) 제거 옵션
+        # 너가 말한 "유효한 정보는 w9QyJ"인데, 요약도 w9QyJ라 포함됨.
+        # 만약 상세(요일/매일)만 저장하고 싶다면 아래 로직 켜면 됨.
+        # - vI8SM 클래스를 가진 w9QyJ는 요약으로 간주하고 제외
+        detailed_lines = []
+        for b in w_blocks:
+            cls = (b.get_attribute("class") or "")
+            if "vI8SM" in cls:
+                continue
+
+            t = _clean_hours_text(b.text)
+            if t:
+                detailed_lines.append(t)
+
+        # 상세가 있으면 상세만 저장, 없으면 전체(lines) 저장(최소한이라도 남기기)
+        out_lines = detailed_lines if detailed_lines else lines
+
+        if debug:
+            dbg.append(f"detail_lines={len(detailed_lines)}")
+
+        # 최종 raw: 블록 단위로 구분되게 빈줄 하나 넣어도 됨(취향)
+        # hours_raw = "\n\n".join(out_lines)
+        hours_raw = " | ".join(out_lines)
+
+        # 펼쳤는데도 상세가 전혀 없고 요약 1블록뿐이면 "상세 없음"으로 치자
+        # if len(out_lines) == 1 and detailed_lines == [] and len(w_blocks) == 1:
+        #     return hours_raw, "HOURS_NO_DETAIL", "\n".join(dbg) if debug else ""
+
+        if not detailed_lines:
+            # 요약만 있거나(혹은 정제 후 상세가 비어버린 경우)
+            return hours_raw, "HOURS_NO_DETAIL", "\n".join(dbg) if debug else ""
+
+        return hours_raw, "OK", "\n".join(dbg) if debug else ""
+
+    except Exception as e:
+        return "", f"HOURS_ERR:{type(e).__name__}", (str(e) if debug else "")
 
 
 

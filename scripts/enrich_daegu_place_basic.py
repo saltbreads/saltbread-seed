@@ -14,6 +14,7 @@ from src.clients.selenium_naver_map import (
     extract_ai_briefing,
     extract_visitor_review_keywords,
     extract_hero_image,
+    extract_business_hours_raw,
     jitter_sleep,
 )
 
@@ -62,6 +63,9 @@ def merge_checkpoint(df: pd.DataFrame) -> pd.DataFrame:
         "hero_img_url",
         "hero_img_status",
         "hero_img_debug",
+        "hours_raw",
+        "hours_status",
+        "hours_debug",
     ]
     keep_cols = [c for c in keep_cols if c in ck.columns]
 
@@ -87,6 +91,9 @@ def merge_checkpoint(df: pd.DataFrame) -> pd.DataFrame:
         "hero_img_url",
         "hero_img_status",
         "hero_img_debug",
+        "hours_raw",
+        "hours_status",
+        "hours_debug",
     ]:
         if f"{col}_ck" in df.columns:
             df[col] = df[col].where(df[col].astype(str).str.strip().str.len() > 0, df[f"{col}_ck"].fillna(""))
@@ -124,6 +131,9 @@ def main():
         "hero_img_url",
         "hero_img_status",
         "hero_img_debug",
+        "hours_raw",
+        "hours_status",
+        "hours_debug",
         "basic_try",
         "ai_try",
 
@@ -183,6 +193,7 @@ def main():
             | pending.apply(need_phone, axis=1)
             | pending.apply(need_ai_retry, axis=1)
             | pending.apply(need_keywords, axis=1)
+            # @TODO 펜딩조건 테스트 다끝나고 대문사진, 영업시간 추가 필요
             ].copy()
 
 
@@ -246,6 +257,12 @@ def main():
                     df.loc[idx, "review_kw_status"] = kw_status
                     df.loc[idx, "review_kw_debug"] = kw_dbg
 
+                    # 4) 영업시간
+                    hours_raw, hours_status, hours_dbg = extract_business_hours_raw(driver, timeout=6, debug=True)
+                    df.loc[idx, "hours_raw"] = hours_raw
+                    df.loc[idx, "hours_status"] = hours_status
+                    df.loc[idx, "hours_debug"] = hours_dbg
+
                     # ✅ 기본 페이지 OK 여부(개별 필드 실패와 분리)
                     df.loc[idx, "basic_status"] = "OK"
 
@@ -274,7 +291,8 @@ def main():
                 f"hero={df.loc[idx, 'hero_img_status']} "
                 f"phone={df.loc[idx, 'phone_status']} "
                 f"ai={df.loc[idx, 'ai_briefing_status']} "
-                f"kw={df.loc[idx, 'review_kw_status']}"
+                f"kw={df.loc[idx, 'review_kw_status']} "
+                f"hours={df.loc[idx, 'hours_status']}"
             )
 
             jitter_sleep(2.0, 3.0)
