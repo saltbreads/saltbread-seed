@@ -40,7 +40,7 @@ def _get_scrollable_element_js():
     return scrollables[0];
     """
 
-def scroll_until_ai_briefing(driver, max_rounds=14, pause_range=(1.5, 2.5), force_down_rounds=3):
+def scroll_until_ai_briefing(driver, max_rounds=6, pause_range=(0.73, 1.43), force_down_rounds=3):
     """
     - entryIframe 안에서 호출된다는 가정
     - 먼저 무조건 force_down_rounds 만큼은 내려서 렌더 트리거

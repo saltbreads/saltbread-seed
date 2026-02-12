@@ -179,8 +179,8 @@ def main():
         return False
 
     #테스트용 코드 부분 나중에 이부분만 False로 하면 다 실행
-    DEV_FORCE_RERUN = True  # ✅ 개발 중엔 True: pending 조건 무시하고 무조건 돌림
-    TEST_LIMIT = 30  # ✅ 개발 중엔 10, 대량 실행 땐 None
+    DEV_FORCE_RERUN = False  # ✅ 개발 중엔 True: pending 조건 무시하고 무조건 돌림
+    TEST_LIMIT = None  # ✅ 개발 중엔 10, 대량 실행 땐 None
 
     pending = df[
         df["naver_place_id"].notna()

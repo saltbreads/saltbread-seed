@@ -98,8 +98,8 @@ def main():
 
     df = merge_checkpoint(df)
 
-    DEV_FORCE_RERUN = True   # 개발 중 True
-    TEST_LIMIT = 30          # 개발 중 10, 대량 실행 None
+    DEV_FORCE_RERUN = False   # 개발 중 True
+    TEST_LIMIT = None          # 개발 중 10, 대량 실행 None
 
     pending = df.copy()
     if not DEV_FORCE_RERUN:
